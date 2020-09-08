@@ -1,0 +1,5 @@
+.env
+image/mongodb/data/*
+!image/mongodb/data/.gitkeep
+*.pyc
+__pycache__/

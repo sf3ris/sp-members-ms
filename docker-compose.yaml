@@ -1,0 +1,35 @@
+version: "3"
+services: 
+    members: 
+        container_name: members
+        build: ./docker
+        ports:
+            - "5001:5001"
+        volumes:
+            - ./app:/usr/src/app
+        restart: always
+        networks: 
+            docker_auth_network:
+                ipv4_address: 172.21.0.3
+
+    mongo:
+        image: mongo:4.2.9
+        restart: always
+        volumes: 
+            - ./image/mongodb/data:/data/db
+        ports: 
+            - "27017:27017"
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: sferis1410
+        networks: 
+            docker_auth_network:
+                ipv4_address: 172.21.0.2
+
+
+networks: 
+    docker_auth_network:    
+        driver: bridge
+        ipam: 
+            config: 
+               - subnet: 172.21.0.0/16
