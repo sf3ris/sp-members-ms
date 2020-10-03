@@ -9,7 +9,7 @@ from core.database import Database
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 app.register_blueprint(routes.routes)
 app.register_blueprint(members_routes.member_routes)
