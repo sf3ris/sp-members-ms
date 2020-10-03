@@ -1,5 +1,4 @@
 from mongoengine import Document, StringField, DateField, EmailField
-from core.custom_document import CustomDocument
 from core.custom_query_set import CustomQuerySet
 
 class Member(Document):

@@ -12,6 +12,9 @@ class Database():
     __auth_source : str = 'admin'
 
     def connect(self):
+
+        print(self.__host, file=stderr)
+
         try:
             mongoengine.connect(
                 self.__db, 

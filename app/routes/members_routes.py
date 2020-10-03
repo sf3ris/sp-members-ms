@@ -53,4 +53,7 @@ def create_member() -> flask.Response:
 
     member.save()
         
-    return member.to_mongo()
+    document = member.to_mongo()
+    document['_id'] = str(document['_id'])
+
+    return document

@@ -1,13 +1,16 @@
 from flask import Flask
+from flask_cors import CORS
+from dotenv import load_dotenv
+
 from routes import routes, members_routes
 from core.bootstrap import Bootstrap
 from core.database import Database
 
-from dotenv import load_dotenv
-
 load_dotenv()
 
 app = Flask(__name__)
+CORS(app)
+
 app.register_blueprint(routes.routes)
 app.register_blueprint(members_routes.member_routes)
 

@@ -8,6 +8,7 @@ services:
         volumes:
             - ./app:/usr/src/app
         restart: always
+        tty: true
         networks: 
             docker_auth_network:
                 ipv4_address: 172.21.0.3
