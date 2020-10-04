@@ -17,10 +17,10 @@ class Member(Document):
     phone           = StringField(required=True)
     email           = StringField(required=True)
 
-    def to_mongo(self):
+    def jsonify(self):
         document = super().to_mongo()
-        document['_id'] = str(document['_id'])
+        if "_id" in document:
+            document['_id'] = str(document['_id'])
 
         return document
-
 

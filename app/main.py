@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, make_response, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
 
@@ -9,10 +9,22 @@ from core.database import Database
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
+app.config['CORS_HEADERS'] = 'Content-Type'
+
+CORS(app, resources={
+    r'/*': {
+        'origins': [
+            'http://localhost:3001'
+        ]
+    }
+})
 
 app.register_blueprint(routes.routes)
 app.register_blueprint(members_routes.member_routes)
+
+@app.errorhandler(404)
+def not_found(error):
+    return make_response(jsonify({'error': 'Not found'}), 404)
 
 if __name__ == "__main__":
     Bootstrap()
