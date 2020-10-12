@@ -5,6 +5,8 @@ import sys, os
 import mongoengine
 from typing import List, Dict
 import bson
+from core.pdf.members_pdf import MembersPDF
+from base64 import b64encode
 
 member_routes = flask.Blueprint('member_routes',__name__)
 
@@ -23,7 +25,15 @@ def member(member_id : str = 0) -> flask.Response:
 @member_routes.route('/members',methods=["GET"])
 def members() -> flask.Response:
 
+    format = flask.request.args.get('format');
+
     members = Member.objects().all()
+
+    if(format == 'pdf'): 
+    # Instantiation of inherited class
+        data = MembersPDF().generate_pdf( members )
+        return {'data':str(b64encode(data).decode("utf-8"))}
+
     def jsonify( member : Member):
             return member.jsonify()
     members = list(map( jsonify, members))
