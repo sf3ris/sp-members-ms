@@ -2,7 +2,7 @@ from flask import Flask, make_response, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
 
-from routes import routes, members_routes
+from routes import routes, members_routes, membership_routes
 from core.bootstrap import Bootstrap
 from core.database import Database
 
@@ -21,6 +21,7 @@ CORS(app, resources={
 
 app.register_blueprint(routes.routes)
 app.register_blueprint(members_routes.member_routes)
+app.register_blueprint(membership_routes.membership_routes)
 
 @app.errorhandler(404)
 def not_found(error):

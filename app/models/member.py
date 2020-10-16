@@ -1,5 +1,7 @@
-from mongoengine import Document, StringField, DateField, EmailField
+from mongoengine import Document, StringField, DateField, EmailField, EmbeddedDocumentListField
 from core.custom_query_set import CustomQuerySet
+
+from models.membership import Membership
 
 class Member(Document):
     meta = {'queryset_class': CustomQuerySet}
@@ -16,6 +18,7 @@ class Member(Document):
     gender          = StringField(required=True, max_length=1)
     phone           = StringField(required=True)
     email           = StringField(required=True)
+    memberships     = EmbeddedDocumentListField(Membership)
 
     def jsonify(self):
         document = super().to_mongo()
