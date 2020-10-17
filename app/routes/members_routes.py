@@ -30,8 +30,12 @@ def members() -> flask.Response:
     members = Member.objects().all()
 
     if(format == 'pdf'): 
-    # Instantiation of inherited class
-        data = MembersPDF().generate_pdf( members )
+
+        columns : str = (flask.request.args.get('columns'))
+        cols = columns.split(',')
+        if(len(cols) < 1) : flask.abort(400)
+
+        data = MembersPDF().generate_pdf( members, cols )
         return {'data':str(b64encode(data).decode("utf-8"))}
 
     def jsonify( member : Member):

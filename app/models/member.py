@@ -3,6 +3,8 @@ from core.custom_query_set import CustomQuerySet
 
 from models.membership import Membership
 
+from typing import Optional
+
 class Member(Document):
     meta = {'queryset_class': CustomQuerySet}
 
@@ -19,6 +21,17 @@ class Member(Document):
     phone           = StringField(required=True)
     email           = StringField(required=True)
     memberships     = EmbeddedDocumentListField(Membership)
+
+    def get_latest_membership(self) -> Optional[DateField]:
+
+        if(len(self.memberships) == 0): return None
+        if( len(self.memberships) == 1): return self.memberships[0].end_date
+
+        latest_membership = self.memberships[0].end_date
+        for membership in self.memberships:
+            if(membership.end_date > latest_membership): latest_membership = membership.end_date
+
+        return latest_membership
 
     def jsonify(self):
         document = super().to_mongo()

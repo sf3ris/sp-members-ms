@@ -3,3 +3,5 @@ image/mongodb/data/*
 !image/mongodb/data/.gitkeep
 *.pyc
 __pycache__/
+app/tmp/*
+!app/tmp/.gitkeep
