@@ -19,6 +19,7 @@ class MembersPDF() :
         pdf.alias_nb_pages()
         pdf.set_title('Elenco soci')
         pdf.set_font('Times', '', 9)
+        pdf.set_fill_color(240,240,240)
         # Effective page width, or just epw
         epw = pdf.w - 2*pdf.l_margin
         
@@ -37,19 +38,19 @@ class MembersPDF() :
         # Text height is the same as current font size
         th = pdf.font_size + 5
 
-        if( 'name' in columns):         pdf.cell(col_width, th,     'Nome', border=1)
-        if( 'last_name' in columns):    pdf.cell(col_width, th,     'Cognome', border=1)
-        if( 'birth_date' in columns):   pdf.cell(birth_date_width, th,     'Data di nascita', border=1)
-        if( 'birth_place' in columns):  pdf.cell(col_width, th,     'Luogo', border=1)
-        if( 'fiscal_code' in columns):  pdf.cell(fiscal_code_width, th,     'Codice Fiscale', border=1)
-        if( 'address' in columns):      pdf.cell(address_width, th,     'Indirizzo', border=1)
-        if( 'zip_code' in columns):     pdf.cell(zip_code_width, th,     'CAP', border=1)
-        if( 'city' in columns):         pdf.cell(col_width, th,     'Città', border=1)
-        if( 'province' in columns):     pdf.cell(province_width, th,     'Provincia', border=1)
-        if( 'gender' in columns):       pdf.cell(gender_width, th,     'Sesso', border=1)
-        if( 'phone' in columns):        pdf.cell(col_width, th,     'Telefono', border=1)
-        if( 'email' in columns):        pdf.cell(email_width, th,     'Email', border=1)
-        if( 'membership' in columns):   pdf.cell(col_width, th, 'Scadenza', border=1)
+        if( 'name' in columns):         pdf.cell(col_width, th,     'Nome', border=1, fill=True)
+        if( 'last_name' in columns):    pdf.cell(col_width, th,     'Cognome', border=1,fill=True)
+        if( 'birth_date' in columns):   pdf.cell(birth_date_width, th,     'Data di nascita', border=1, fill=True)
+        if( 'birth_place' in columns):  pdf.cell(col_width, th,     'Luogo', border=1, fill=True)
+        if( 'fiscal_code' in columns):  pdf.cell(fiscal_code_width, th,     'Codice Fiscale', border=1, fill=True)
+        if( 'address' in columns):      pdf.cell(address_width, th,     'Indirizzo', border=1, fill=True)
+        if( 'zip_code' in columns):     pdf.cell(zip_code_width, th,     'CAP', border=1, fill=True)
+        if( 'city' in columns):         pdf.cell(col_width, th,     'Città', border=1,fill=True)
+        if( 'province' in columns):     pdf.cell(province_width, th,     'Provincia', border=1, fill=True)
+        if( 'gender' in columns):       pdf.cell(gender_width, th,     'Sesso', border=1, fill=True)
+        if( 'phone' in columns):        pdf.cell(col_width, th,     'Telefono', border=1, fill=True)
+        if( 'email' in columns):        pdf.cell(email_width, th,     'Email', border=1, fill=True)
+        if( 'membership' in columns):   pdf.cell(col_width, th, 'Scadenza', border=1, fill=True)
         pdf.ln(th)
 
         pdf.set_font('Times', '', 8)

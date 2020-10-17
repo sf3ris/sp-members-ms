@@ -7,7 +7,7 @@ class PDF(FPDF):
         # Move to the right
         self.cell(80)
         # Title
-        self.cell(50, 10, title, 1, 0, 'C')
+        self.cell(120, 10, title, 1, 0, 'C')
         # Line break
         self.ln(20)
 
