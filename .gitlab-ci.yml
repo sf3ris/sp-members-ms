@@ -24,6 +24,6 @@ deploy:
         # Upload to Production
         - export SSHPASS=$SSH_PASSWORD
         - GLOBIGNORE="image" sshpass -e scp -o stricthostkeychecking=no -r $(pwd) $SSH_USERNAME@159.65.125.31:/usr/src/ms_members/
-        - sshpass -e ssh $SSH_USERNAME@159.65.125.31 'cd /usr/src/members_microservice; docker-compose down; cd /usr/src/; rm -rf members_microservice.old; mv members_microservice members_microservice.old && mv ms_members/members_microservice members_microservice; cd members_microservice; docker-compose up -d --build --force-recreate;'
+        - sshpass -e ssh $SSH_USERNAME@159.65.125.31 'cd /usr/src/members_microservice; docker-compose down; cd /usr/src/; rm -rf members_microservice.old 2> /dev/null; mv members_microservice members_microservice.old && mv ms_members/sp-members-ms members_microservice; cd members_microservice; docker-compose up -d --build --force-recreate;'
     only: 
         - master
