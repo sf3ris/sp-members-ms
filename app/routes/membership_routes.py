@@ -33,4 +33,18 @@ def create_membership( member_id : str = 0 ) -> flask.Response:
 
     return flask.jsonify(member.jsonify())
 
+@membership_routes.route('/members/<member_id>/memberships/<membership_id>', methods=["DELETE"])
+def delete_membership( member_id : str = 0, membership_id: str = 0 ) -> flask.Response:
+
+    if not bson.ObjectId.is_valid(member_id):
+        flask.abort(400)
+
+    member : Member = Member.objects(id=member_id).first()
+    if not member : 
+        flask.abort(404)
+    member.update(pull__memberships___id=membership_id)
+    member.reload()
+
+    return flask.jsonify(member.jsonify())
+
     

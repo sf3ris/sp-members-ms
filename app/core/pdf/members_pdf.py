@@ -58,7 +58,6 @@ class MembersPDF() :
         for member in members:
 
             latest_membership = member.get_latest_membership()
-            print(latest_membership, file=sys.stderr)
 
             #pdf.cell(0, 10, member.name, 0, 1)
             if( 'name' in columns):         pdf.cell(col_width, th, member.name, border=1)

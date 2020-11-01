@@ -17,7 +17,8 @@ services:
         image: mongo:4.2.9
         restart: always
         volumes: 
-            - ./image/mongodb/data:/data/db
+            #- ./image/mongodb/data:/data/db
+            - /var/lib/mongo-members:/data/db
         ports: 
             - "27017:27017"
         environment:

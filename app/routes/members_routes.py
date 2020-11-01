@@ -8,6 +8,8 @@ import bson
 from core.pdf.members_pdf import MembersPDF
 from base64 import b64encode
 
+from middlewares.auth_middleware import AuthMiddleware
+
 member_routes = flask.Blueprint('member_routes',__name__)
 
 @member_routes.route('/members/<member_id>',methods=["GET"])

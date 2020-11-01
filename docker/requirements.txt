@@ -6,3 +6,4 @@ pytest
 mongoengine
 flask-cors
 fpdf
+requests
