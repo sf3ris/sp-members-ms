@@ -18,7 +18,7 @@ deploy:
         # Setup Production Environment
         - mv app/.env.example app/.env
         - sed -i "s/:AUTH_SERVICE_HOST/$AUTH_HOST/g" app/.env
-        - sed -i "s/:HOST/172.20.0.2/g" app/.env
+        - sed -i "s/:HOST/172.21.0.2/g" app/.env
         - sed -i "s/:USER/root/g" app/.env
         - sed -i "s/:PASSWORD/$DB_PASS/g" app/.env
         # Upload to Production
