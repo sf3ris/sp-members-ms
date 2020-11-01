@@ -17,10 +17,10 @@ deploy:
     script:
         # Setup Production Environment
         - mv app/.env.example app/.env
+        - sed -i "s/:AUTH_SERVICE_HOST/$AUTH_SERVICE_HOST/g" app/.env
         - sed -i "s/:HOST/172.20.0.2/g" app/.env
         - sed -i "s/:USER/root/g" app/.env
         - sed -i "s/:PASSWORD/$DB_PASS/g" app/.env
-        #- sed -i "s/:AUTH_SERVICE_HOST/$AUTH_SERVICE_HOST/g" app/.env
         # Upload to Production
         - export SSHPASS=$SSH_PASSWORD
         - GLOBIGNORE="image" sshpass -e scp -o stricthostkeychecking=no -r $(pwd) $SSH_USERNAME@159.65.125.31:/usr/src/ms_members/
