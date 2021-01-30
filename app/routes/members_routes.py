@@ -2,6 +2,7 @@ import flask
 from flask_cors import cross_origin
 from models.member import Member
 import mongoengine
+from mongoengine.queryset.visitor import Q
 import bson
 from core.pdf.members_pdf import MembersPDF
 from base64 import b64encode
@@ -26,7 +27,25 @@ def member(member_id: str = 0) -> flask.Response:
 @member_routes.route('/members', methods=["GET"])
 def members() -> flask.Response:
     format = flask.request.args.get('format')
-    members = Member.objects().all()
+    name = flask.request.args.get('name')
+    last_name = flask.request.args.get('lastName')
+    fiscal_code = flask.request.args.get('fiscalCode')
+    status = flask.request.args.get('status')
+
+    members = Member.objects(
+        Q(name__contains=name) &
+        Q(last_name__contains=last_name) &
+        Q(fiscal_code__contains=fiscal_code)
+    )
+
+    if status != '':
+        if status == 'true':
+            members = list(filter(lambda member: member.is_enabled(), members))
+        else:
+            members = list(filter(
+                lambda member: not member.is_enabled(),
+                members
+            ))
 
     if(format == 'pdf'):
         columns: str = (flask.request.args.get('columns'))
