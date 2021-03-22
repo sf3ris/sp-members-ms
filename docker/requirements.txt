@@ -7,3 +7,5 @@ mongoengine
 flask-cors
 fpdf
 requests
+pyexcel
+pyexcel-xlsx

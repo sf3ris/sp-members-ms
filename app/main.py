@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 
 from routes import routes, members_routes, membership_routes, athlete_routes
 from core.bootstrap import Bootstrap
-from core.database import Database
 
 from middlewares.auth_middleware import AuthMiddleware
 
@@ -29,17 +28,21 @@ app.register_blueprint(members_routes.member_routes)
 app.register_blueprint(membership_routes.membership_routes)
 app.register_blueprint(athlete_routes.athlete_routes)
 
+
 @app.errorhandler(404)
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
 
+
 @app.errorhandler(401)
-def not_found(error):
+def unauthorized(error):
     return make_response(jsonify({'error': 'Unauthorized'}), 401)
+
 
 @app.errorhandler(400)
 def bad_request(error):
     return make_response(jsonify({'error': 'Bad Request'}), 400)
+
 
 if __name__ == "__main__":
     Bootstrap()
