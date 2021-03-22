@@ -47,5 +47,3 @@ def delete_membership(
     member.reload()
 
     return flask.jsonify(member.jsonify())
-
-    

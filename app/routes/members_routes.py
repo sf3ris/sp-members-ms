@@ -7,13 +7,14 @@ import bson
 from core.pdf.members_pdf import MembersPDF
 from base64 import b64encode
 import json
+from services.import_document_service import import_document
+import pyexcel as p
 
 member_routes = flask.Blueprint('member_routes', __name__)
 
 
 @member_routes.route('/members/<member_id>', methods=["GET"])
-def member(member_id: str = 0) -> flask.Response:
-
+def get_member(member_id: str = 0) -> flask.Response:
     if not bson.ObjectId.is_valid(member_id):
         flask.abort(400)
 
@@ -25,7 +26,7 @@ def member(member_id: str = 0) -> flask.Response:
 
 
 @member_routes.route('/members', methods=["GET"])
-def members() -> flask.Response:
+def get_members() -> flask.Response:
     format = flask.request.args.get('format')
     name = flask.request.args.get('name')
     last_name = flask.request.args.get('lastName')
@@ -47,10 +48,10 @@ def members() -> flask.Response:
                 members
             ))
 
-    if(format == 'pdf'):
+    if (format == 'pdf'):
         columns: str = (flask.request.args.get('columns'))
         cols = columns.split(',')
-        if(len(cols) < 1):
+        if (len(cols) < 1):
             flask.abort(400)
 
         data = MembersPDF().generate_pdf(members, cols)
@@ -58,6 +59,7 @@ def members() -> flask.Response:
 
     def jsonify(member: Member):
         return member.jsonify()
+
     members = list(map(jsonify, members))
 
     return flask.jsonify(members)
@@ -66,7 +68,6 @@ def members() -> flask.Response:
 @member_routes.route('/members', methods=["POST"])
 @cross_origin(supports_credentials=True)
 def create_member() -> flask.Response:
-
     name = flask.request.form.get('name')
     last_name = flask.request.form.get('last_name')
     birth_date = flask.request.form.get('birth_date')
@@ -82,20 +83,20 @@ def create_member() -> flask.Response:
     memberships = json.loads(flask.request.form.get('temporaryMemberships'))
 
     member = Member(
-            name=name,
-            last_name=last_name,
-            birth_date=birth_date,
-            birth_place=birth_place,
-            fiscal_code=fiscal_code,
-            address=address,
-            zip_code=zip_code,
-            city=city,
-            province=province,
-            gender=gender,
-            phone=phone,
-            email=email,
-            memberships=memberships
-        )
+        name=name,
+        last_name=last_name,
+        birth_date=birth_date,
+        birth_place=birth_place,
+        fiscal_code=fiscal_code,
+        address=address,
+        zip_code=zip_code,
+        city=city,
+        province=province,
+        gender=gender,
+        phone=phone,
+        email=email,
+        memberships=memberships
+    )
 
     member.save()
 
@@ -105,7 +106,6 @@ def create_member() -> flask.Response:
 @member_routes.route('/members/<member_id>', methods=["PUT"])
 @cross_origin(supports_credentials=True)
 def update_member(member_id: str) -> flask.Response:
-
     if not bson.ObjectId.is_valid(member_id):
         flask.abort(400)
 
@@ -158,7 +158,6 @@ def update_member(member_id: str) -> flask.Response:
 
 @member_routes.route('/members/<member_id>', methods=["DELETE"])
 def delete_member(member_id: str) -> flask.Response:
-
     if not bson.ObjectId.is_valid(member_id):
         flask.abort(400)
 
@@ -169,3 +168,45 @@ def delete_member(member_id: str) -> flask.Response:
     member.delete()
 
     return ('', 200)
+
+
+@member_routes.route('/bulk/members', methods=['POST'])
+def import_athletes():
+    upload_file = flask.request.files['members']
+    file_path = "./tmp/bulk_members_upload.xlsx"
+    upload_file.save(file_path)
+
+    rows = p.get_records(file_name=file_path, start_row=1)
+
+    # Retrieves header name for the excel file
+    name_field = flask.request.form.get('name')
+    last_name_field = flask.request.form.get('last_name')
+    birth_date_field = flask.request.form.get('birth_date')
+    birth_place_field = flask.request.form.get('birth_place')
+    fiscal_code_field = flask.request.form.get('fiscal_code')
+    address_field = flask.request.form.get('address')
+    zip_code_field = flask.request.form.get('zip_code')
+    city_field = flask.request.form.get('city')
+    province_field = flask.request.form.get('province')
+    gender_field = flask.request.form.get('gender')
+    phone_field = flask.request.form.get('phone')
+    email_field = flask.request.form.get('email')
+
+    members = import_document(
+        Member,
+        rows,
+        name_field,
+        last_name_field,
+        birth_date_field,
+        birth_place_field,
+        fiscal_code_field,
+        address_field,
+        zip_code_field,
+        city_field,
+        province_field,
+        gender_field,
+        phone_field,
+        email_field
+    )
+
+    return flask.jsonify(members)
