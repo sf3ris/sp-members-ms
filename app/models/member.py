@@ -30,15 +30,14 @@ class Member(Document):
         return False
 
     def get_latest_membership(self) -> Optional[DateField]:
-
-        if(len(self.memberships) == 0):
+        if len(self.memberships) == 0:
             return None
-        if(len(self.memberships) == 1):
+        if len(self.memberships) == 1:
             return self.memberships[0].end_date
 
         latest_membership = self.memberships[0].end_date
         for membership in self.memberships:
-            if(membership.end_date > latest_membership):
+            if membership.end_date > latest_membership:
                 latest_membership = membership.end_date
 
         return latest_membership
@@ -49,3 +48,16 @@ class Member(Document):
             document['_id'] = str(document['_id'])
 
         return document
+
+    def is_empty(self):
+        return not self.name \
+               and not self.last_name \
+               and not self.birth_date \
+               and not self.birth_place \
+               and not self.fiscal_code \
+               and not self.address \
+               and not self.city \
+               and not self.email \
+               and not self.province \
+               and not self.gender \
+               and not self.email
