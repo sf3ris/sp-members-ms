@@ -51,7 +51,8 @@ jobs:
           script: |
             cd /usr/src/members_microservice 2> /dev/null && docker-compose down;
             cd /usr/src/;
-            members_microservice.old 2> /dev/null;
-            mv members_microservice members_microservice.old && mv ms_members/sp-members-ms members_microservice;
+            rm members_microservice.old 2> /dev/null;
+            ls -la ms_members;
+            mv members_microservice members_microservice.old && mv ms_members members_microservice;
             cd members_microservice;
             docker-compose up -d --build --force-recreate;
