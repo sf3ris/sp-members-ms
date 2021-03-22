@@ -24,7 +24,7 @@ jobs:
           architecture: 'x64'
       # You can test your matrix by printing the current Python version
       - name: Build project
-        run: pip install --no-cache-dir -r requirements.txt
+        run: pip install --no-cache-dir -r docker/requirements.txt
       - name: Setup Environment
         run: |
           mv app/.env.example app/.env
