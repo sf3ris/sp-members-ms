@@ -17,7 +17,7 @@ class Member(Document):
     address = StringField(required=True)
     zip_code = StringField(required=True, max_length=5)
     city = StringField(required=True)
-    province = StringField(required=True, max_length=2)
+    province = StringField(required=True)
     gender = StringField(required=True, max_length=1)
     phone = StringField(required=True)
     email = StringField(required=True)

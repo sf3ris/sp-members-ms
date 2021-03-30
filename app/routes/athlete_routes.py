@@ -1,6 +1,11 @@
+from base64 import b64encode
+
 import flask
 import pyexcel as p
 import bson
+from mongoengine import Q
+
+from core.pdf.members_pdf import MembersPDF
 from models.athlete import Athlete
 from services.import_document_service import import_document
 
@@ -9,7 +14,28 @@ athlete_routes = flask.Blueprint('athlete_route', __name__)
 
 @athlete_routes.route('/athletes', methods=['GET'])
 def athletes() -> flask.Response:
-    athletes = Athlete.objects().all()
+    format = flask.request.args.get('format', '')
+    name = flask.request.args.get('name', '')
+    last_name = flask.request.args.get('lastName', '')
+    fiscal_code = flask.request.args.get('fiscalCode', '')
+    status = flask.request.args.get('status', '')
+
+    athletes = Athlete.objects(
+        Q(name__contains=name) &
+        Q(last_name__contains=last_name) &
+        Q(fiscal_code__contains=fiscal_code)
+    )
+    if format == 'pdf':
+        columns: str = (flask.request.args.get('columns'))
+        cols = columns.split(',')
+        if len(cols) < 1:
+            flask.abort(400)
+
+        data = MembersPDF().generate_athletes_pdf(
+            athletes=athletes, columns=cols
+        )
+        return {'data': str(b64encode(data).decode("utf-8"))}
+
     athletes = [athlete.jsonify() for athlete in athletes]
 
     return flask.jsonify(athletes)

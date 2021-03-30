@@ -5,3 +5,4 @@ image/mongodb/data/*
 __pycache__/
 app/tmp/*
 !app/tmp/.gitkeep
+.idea
