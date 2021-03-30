@@ -27,11 +27,11 @@ def get_member(member_id: str = 0) -> flask.Response:
 
 @member_routes.route('/members', methods=["GET"])
 def get_members() -> flask.Response:
-    format = flask.request.args.get('format')
-    name = flask.request.args.get('name')
-    last_name = flask.request.args.get('lastName')
-    fiscal_code = flask.request.args.get('fiscalCode')
-    status = flask.request.args.get('status')
+    format = flask.request.args.get('format', '')
+    name = flask.request.args.get('name', '')
+    last_name = flask.request.args.get('lastName', '')
+    fiscal_code = flask.request.args.get('fiscalCode', '')
+    status = flask.request.args.get('status', '')
 
     members = Member.objects(
         Q(name__contains=name) &
@@ -48,21 +48,16 @@ def get_members() -> flask.Response:
                 members
             ))
 
-    if (format == 'pdf'):
+    if format == 'pdf':
         columns: str = (flask.request.args.get('columns'))
         cols = columns.split(',')
-        if (len(cols) < 1):
+        if len(cols) < 1:
             flask.abort(400)
 
-        data = MembersPDF().generate_pdf(members, cols)
+        data = MembersPDF().generate_members_pdf(members, cols)
         return {'data': str(b64encode(data).decode("utf-8"))}
 
-    def jsonify(member: Member):
-        return member.jsonify()
-
-    members = list(map(jsonify, members))
-
-    return flask.jsonify(members)
+    return flask.jsonify([member.jsonify() for member in members])
 
 
 @member_routes.route('/members', methods=["POST"])
