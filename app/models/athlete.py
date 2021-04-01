@@ -1,11 +1,12 @@
 import datetime
 from typing import Optional
-
+from sys import stderr
 from mongoengine import (
     Document,
     StringField,
     DateField,
-    EmbeddedDocumentListField
+    EmbeddedDocumentListField,
+    ListField
 )
 from core.custom_query_set import CustomQuerySet
 
@@ -28,6 +29,7 @@ class Athlete(Document):
     phone = StringField(required=True)
     email = StringField(required=True)
     memberships = EmbeddedDocumentListField(Membership)
+    tutors = ListField(StringField())
 
     def jsonify(self):
         document = super().to_mongo()
