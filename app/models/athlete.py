@@ -1,6 +1,5 @@
 import datetime
 from typing import Optional
-from sys import stderr
 from mongoengine import (
     Document,
     StringField,

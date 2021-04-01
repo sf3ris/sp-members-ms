@@ -1,6 +1,4 @@
 from base64 import b64encode
-from sys import stderr
-
 import flask
 import pyexcel as p
 import bson
@@ -68,7 +66,7 @@ def create_athlete() -> flask.Response:
     gender = flask.request.form.get('gender')
     phone = flask.request.form.get('phone')
     email = flask.request.form.get('email')
-    tutors = flask.request.form.get('tutors', None)
+    tutors = flask.request.form.getlist('tutors')
 
     athlete = Athlete(
         name=name,
@@ -109,7 +107,7 @@ def update_athlete(athlete_id: str) -> flask.Response:
     phone = flask.request.form.get('phone')
     email = flask.request.form.get('email')
     tutors = flask.request.form.getlist('tutors')
-    print(tutors, file=stderr)
+
     athlete: Athlete = Athlete.objects(id=athlete_id).first()
     if not athlete:
         flask.abort(400)
